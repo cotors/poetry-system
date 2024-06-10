@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.mapper.userMapper">
+
+    <insert id="register">
+        insert into user(username,name,password,avatar,create_time,update_time)
+        values (#{username},#{name},#{password},#{avatar},now(),now())
+    </insert>
+
+    <select id="findById" resultType="User">
+        select * from user where username = #{username}
+    </select>
+
+    <delete id="deleteById" parameterType="com.chen.entity.User">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.chen.entity.User">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByName" resultType="User">
+        select * from user
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert">
+        insert into user(username,name,avatar,create_time,update_time)
+        values (#{username},#{name},#{avatar},now(),now())
+    </insert>
+
+    <select id="select" resultType="User">
+        select * from user
+    </select>
+
+    <update id="updateByPwd" parameterType="com.chen.entity.User">
+        update user set password = #{md5String} where username = #{username}
+    </update>
+
+</mapper>
